@@ -11,14 +11,33 @@
 /* eslint-env node, dirigible */
 (function(){
 "use strict";
-	exports.service = function(QUnit){
-		var svc_reporter = require("qunit/reporters/svc-reporter");
-		svc_reporter.QUnit = QUnit;
-		require("test/runner").service({
+	exports.run = function(QUnit, config){
+		if(arguments.length == 1){
+			//try to guess using well-known properties in QUnit
+			if(!arguments[0].version && !arguments[0].assert){
+				config = arguments[0];
+				QUnit = undefined;
+			}
+		}
+		config = config || {};
+		var console_reporter,svc_reporter;
+		if(!config["disable-console-reporter"])
+			console_reporter = require("qunit/reporters/console-reporter");
+		if(!config["disable-service-reporter"])
+			svc_reporter = require("qunit/reporters/svc-reporter");
+		if(!QUnit){
+			QUnit = require('qunit/qunit');	
+		} else {
+			if(console_reporter)
+				console_reporter.QUnit = QUnit;
+			if(svc_reporter)
+				svc_reporter.QUnit = QUnit;
+		}
+		require("test/runner").run({
 			"execute": function(){
 					QUnit.load();
 				}.bind(this),
-			"serviceReporter": svc_reporter 
+			"serviceReporter": svc_reporter
 		});	
 	};
 })();

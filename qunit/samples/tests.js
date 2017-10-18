@@ -11,8 +11,6 @@
 /* eslint-env node, dirigible */
 var QUnit = require("qunit/qunit");
 
-QUnit.config.notrycatch  = false;
-
 QUnit.module('Module 1:');
 
 QUnit.test("Test 1", function(assert) {
@@ -20,10 +18,4 @@ QUnit.test("Test 1", function(assert) {
 	assert.ok(false, 'Failing assertion');
 });
 
-QUnit.test("Test 2", function(assert) {
-	assert.ok(true, 'Passing assertion');
-});
-
-require("qunit/reporters/console-reporter");
-
-require("qunit/test-runner").service(QUnit);
+require("qunit/test-runner").run();
