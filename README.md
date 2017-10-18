@@ -26,7 +26,7 @@ Or to get reference to a specific version:
 `var QUnit = require("qunit/qunit-2.0.1");`  
 In this example the reference is to QUnit 2.0.1. Change as appropriate.
 
-Note that all instances QUnit supplied by `require` are singletons.
+Note that all instances of QUnit supplied by such `require` invocations are singletons.
 
 ### Develop tests
 Develop Qunit tests as usual. Just bear in mind that this is server-side environment and don't count on browser JS environment and objects like window or document.  
