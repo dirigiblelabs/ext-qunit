@@ -20,12 +20,11 @@ require("qunit/test-runner").run();
 The next section will use this example to explore the main steps in using QUnit for testing server-side scripts.
 
 ### Load Qunit
-To get a reference to a specific version of QUnit, use:  
+To get a reference to the latest QUnit in this module, use the alias `qunit/qunit` path and `require` it:  
+`var QUnit = require("qunit/qunit");`  
+Or to get reference to a specific version:  
 `var QUnit = require("qunit/qunit-2.0.1");`  
 In this example the reference is to QUnit 2.0.1. Change as appropriate.
-
-Or use `qunit/qunit` (no version), which is alias for the latest available version in this repository:  
-`var QUnit = require("qunit/qunit");`  
 
 Note that all instances QUnit supplied by `require` are singletons.
 
