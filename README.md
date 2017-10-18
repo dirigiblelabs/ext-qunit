@@ -15,8 +15,7 @@ QUnit.test("Test 1", function(assert) {
 	assert.ok(false, 'Failing assertion');
 });
 
-require("qunit/reporters/console-reporter");
-require("qunit/test-runner").service();
+require("qunit/test-runner").run();
 </pre>
 The next section will use this example to explore the main steps in using QUnit for testing server-side scripts.
 
@@ -40,29 +39,25 @@ QUnit.test("Test 1", function(assert) {
 	assert.ok(false, 'Failing assertion');
 });</pre>
 
-### Test execution and results reporting
-You will need to instrument results reporting, before executing tests if you want to see any results. This module comes with two out-of-the-box results reporters. 
-* Console results reporter  
-  Results will be printed in Dirigible's console using the `console` global object.  
-  To enable console reporting call:  
-  `require("qunit/reporters/console-reporter");`  
-  This will require and register the reporter with the QUnit that goes by the module name `"qunit/qunit"`. To enforce use of another QUnit instance use the `Qunit` property to specify it:  
-  `require("qunit/reporters/console-reporter").Qunit = Qunit`
-* Test Runner Service results reporter  
-  This reporter is used as callback internally by Dirigible's Test Runner and it's not likely that you will need to require it explicitly. For more information on the Test Runner see below.
+### Run tests
+To run the tests and dispatch results, with Dirigible Test Runner use:  
+`require("qunit/test-runner").run();`  
 
-To execute tests we need QUnit's `load` method invoked.  
-If you have instrumented the tests to report results only using the console results reporter, make sure that you invoke `QUnit.load()` **after** you have required this reporter.
-
-However, you can make use of Dirigible Tests Runner instead, and it will implicitly call `QUnit.load()` for you.  
-To run tests using Dirigible Test Runner use:  
-`require("qunit/test-runner").service();`  
-It will implicitly require the Test Runner Service results reporter mentioned above, invoke tests with a call to `QUnit.load()`, and depending on the requested results media type, either forward you to a web page with Tests dashboard UI or return the results in the requested media type (xml or json).  
 If you use a specific version (not the latest) of QUnit from this module, you need to supply it explicitly as argument to the service method:  
-`require("qunit/test-runner").service(QUnit);`  
+`require("qunit/test-runner").run(QUnit);`  
 
-Note, that you can make use of both test results reporters together.  
-
+### Test results
+Test results are available on the Dirigible server console and via the Test Runner Service by default. You can opt out of either of these or both. The `run` method has an optional second argument, which is a configuration object that can be used to disable the default reporters in use:  
+<pre>
+require("qunit/test-runner").run(QUnit, {
+    "disable-console-reporter":true,
+    "disable-service-reporter": true
+  });
+</pre>
+Or omit the QUnit argument and supply only the configuration:  
+<pre>
+require("qunit/test-runner").run({"disable-console-reporter":true});
+</pre>
 
 ## License
 
