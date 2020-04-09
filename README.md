@@ -1,7 +1,7 @@
 # QUnit Dirigible v3 Module
 
 [![Eclipse License](http://img.shields.io/badge/license-Eclipse-brightgreen.svg)](LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/dirigiblelabs/ext-v3-qunit.svg)](https://github.com/dirigiblelabs/ext-v3-qunit/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/dirigiblelabs/ext-qunit.svg)](https://github.com/dirigiblelabs/ext-qunit/graphs/contributors)
 
 ## Use
 ### Example
