@@ -5,7 +5,7 @@
 
 ## Use
 ### Example
-<pre>
+```javascript
 var QUnit = require("qunit/qunit");
 
 QUnit.module('Module 1:');
@@ -16,7 +16,8 @@ QUnit.test("Test 1", function(assert) {
 });
 
 require("qunit/test-runner").run();
-</pre>
+```
+
 The next section will use this example to explore the main steps in using QUnit for testing server-side scripts.
 
 ### Load Qunit
@@ -31,12 +32,14 @@ Note that all instances of QUnit supplied by such `require` invocations are sing
 ### Develop tests
 Develop Qunit tests as usual. Just bear in mind that this is server-side environment and don't count on browser JS environment and objects like window or document.  
   
-<pre>QUnit.module('Module 1:');
+```javascript
+QUnit.module('Module 1:');
 
 QUnit.test("Test 1", function(assert) {
 	assert.ok(true, 'Passing assertion');
 	assert.ok(false, 'Failing assertion');
-});</pre>
+});
+```
 
 ### Run tests
 To run the tests and dispatch results, with Dirigible Test Runner use:  
@@ -47,12 +50,13 @@ If you use a specific version (not the latest) of QUnit from this module, you ne
 
 ### Test results
 Test results are available on the Dirigible server console and via the Test Runner Service by default. You can opt out of either of these or both. The `run` method has an optional second argument, which is a configuration object that can be used to disable the default reporters in use:  
-<pre>
+```javascript
 require("qunit/test-runner").run(QUnit, {
-    "disable-console-reporter":true,
+    "disable-console-reporter": true,
     "disable-service-reporter": true
   });
-</pre>
+```
+
 Or omit the QUnit argument and supply only the configuration:  
 <pre>
 require("qunit/test-runner").run({"disable-console-reporter":true});
