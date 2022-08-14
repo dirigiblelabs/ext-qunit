@@ -8,23 +8,28 @@
  * Contributors:
  *   SAP - initial API and implementation
  */
-(function() {
+(function () {
 	'use strict';
-	
-	var QUnit = this.QUnit || require("qunit/qunit");
+
+	var QUnit;
+	if (this) {
+		QUnit = this.QUnit || require("qunit/qunit");
+	} else {
+		QUnit = require("qunit/qunit");
+	}
 
 	var currentRun, currentModule, currentTest, assertCount,
-			jUnitReportData, _executeRegisteredCallbacks,
-			jUnitDoneCallbacks = [];
+		jUnitReportData, _executeRegisteredCallbacks,
+		jUnitDoneCallbacks = [];
 
 	// Old API
 	// Gets called when a report is generated.
-	QUnit.jUnitReport = function(/* data */) {
+	QUnit.jUnitReport = function (/* data */) {
 		// Override me!
 	};
 
 	// New API
-	QUnit.jUnitDone = function(cb) {
+	QUnit.jUnitDone = function (cb) {
 		if (typeof cb === 'function') {
 			// If QUnit is already done running, just execute the newly registered callback immediately
 			if (jUnitReportData) {
@@ -36,7 +41,7 @@
 		}
 	};
 
-	_executeRegisteredCallbacks = function() {
+	_executeRegisteredCallbacks = function () {
 		// New API support
 		var cb;
 		do {
@@ -53,7 +58,7 @@
 		}
 	};
 
-	QUnit.begin(function() {
+	QUnit.begin(function () {
 		currentRun = {
 			modules: [],
 			total: 0,
@@ -64,7 +69,7 @@
 		};
 	});
 
-	QUnit.moduleStart(function(data) {
+	QUnit.moduleStart(function (data) {
 		currentModule = {
 			name: data.name,
 			tests: [],
@@ -80,7 +85,7 @@
 		currentRun.modules.push(currentModule);
 	});
 
-	QUnit.testStart(function(data) {
+	QUnit.testStart(function (data) {
 		// Setup default module if no module was specified
 		if (!currentModule) {
 			currentModule = {
@@ -114,7 +119,7 @@
 		currentModule.tests.push(currentTest);
 	});
 
-	QUnit.log(function(data) {
+	QUnit.log(function (data) {
 		assertCount++;
 
 		// Ignore passing assertions
@@ -123,12 +128,12 @@
 			// Add log message of failure to make it easier to find in Jenkins CI
 			currentModule.stdout.push(
 				'[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' +
-				data.message + ( data.source ? '\nSource: ' + data.source : '' )
+				data.message + (data.source ? '\nSource: ' + data.source : '')
 			);
 		}
 	});
 
-	QUnit.testDone(function(data) {
+	QUnit.testDone(function (data) {
 		currentTest.time = (new Date()).getTime() - currentTest.start.getTime();  // ms
 		currentTest.total = data.total;
 		currentTest.passed = data.passed;
@@ -137,7 +142,7 @@
 		currentTest = null;
 	});
 
-	QUnit.moduleDone(function(data) {
+	QUnit.moduleDone(function (data) {
 		currentModule.time = (new Date()).getTime() - currentModule.start.getTime();  // ms
 		currentModule.total = data.total;
 		currentModule.passed = data.passed;
@@ -146,7 +151,7 @@
 		currentModule = null;
 	});
 
-	QUnit.done(function(data) {
+	QUnit.done(function (data) {
 		currentRun.time = data.runtime || ((new Date()).getTime() - currentRun.start.getTime());  // ms
 		currentRun.total = data.total;
 		currentRun.passed = data.passed;
@@ -155,42 +160,42 @@
 		generateReport(data, currentRun);
 	});
 
-	var generateReport = function(results, run) {
-		var pad = function(n) {
+	var generateReport = function (results, run) {
+		var pad = function (n) {
 			return n < 10 ? '0' + n : n;
 		};
 
-		var toISODateString = function(d) {
+		var toISODateString = function (d) {
 			return d.getUTCFullYear() + '-' +
-				pad(d.getUTCMonth() + 1)+'-' +
+				pad(d.getUTCMonth() + 1) + '-' +
 				pad(d.getUTCDate()) + 'T' +
 				pad(d.getUTCHours()) + ':' +
 				pad(d.getUTCMinutes()) + ':' +
 				pad(d.getUTCSeconds()) + 'Z';
 		};
 
-		var convertMillisToSeconds = function(ms) {
+		var convertMillisToSeconds = function (ms) {
 			return Math.round(ms * 1000) / 1000000;
 		};
 
-		var xmlEncode = function(text) {
+		var xmlEncode = function (text) {
 			var baseEntities = {
-				'<' : '&lt;',
-				'>' : '&gt;',
-				'&' : '&amp;',
-				'"' : '&quot;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'&': '&amp;',
+				'"': '&quot;',
 				'\'': '&apos;',
 				'\r': '',
 				'\n': '&#10;',
 				'\t': '&#9;'
 			};
 
-			return ('' + text).replace(/[<>&"'\r\n\t]/g, function(chr) {
+			return ('' + text).replace(/[<>&"'\r\n\t]/g, function (chr) {
 				return baseEntities.hasOwnProperty(chr) ? baseEntities[chr] : chr;
 			});
 		};
 
-		var XmlWriter = function(settings) {
+		var XmlWriter = function (settings) {
 			if (!(this instanceof XmlWriter)) {
 				return new XmlWriter(settings);
 			}
@@ -198,16 +203,16 @@
 			settings = settings || {};
 
 			var data = [],
-					stack = [],
-					lineBreakAt;
+				stack = [],
+				lineBreakAt;
 
-			var addLineBreak = function(name) {
+			var addLineBreak = function (name) {
 				if (lineBreakAt[name] && data[data.length - 1] !== '\n') {
 					data.push('\n');
 				}
 			};
 
-			lineBreakAt = (function(items) {
+			lineBreakAt = (function (items) {
 				var i, map = {};
 				items = items || [];
 
@@ -218,7 +223,7 @@
 				return map;
 			})(settings.linebreak_at);
 
-			this.start = function(name, attrs, empty) {
+			this.start = function (name, attrs, empty) {
 				if (!empty) {
 					stack.push(name);
 				}
@@ -233,40 +238,40 @@
 				addLineBreak(name);
 			};
 
-			this.end = function() {
+			this.end = function () {
 				var name = stack.pop();
 				addLineBreak(name);
 				data.push('</' + name + '>');
 				addLineBreak(name);
 			};
 
-			this.text = function(text) {
+			this.text = function (text) {
 				data.push(xmlEncode(text));
 			};
 
-			this.cdata = function(text) {
+			this.cdata = function (text) {
 				data.push('<![CDATA[' + text + ']]>');
 			};
 
-			this.comment = function(text) {
+			this.comment = function (text) {
 				data.push('<!--' + text + '-->');
 			};
-			this.pi = function(name, text) {
+			this.pi = function (name, text) {
 				data.push('<?' + name + (text ? ' ' + text : '') + '?>\n');
 			};
 
-			this.doctype = function(text) {
+			this.doctype = function (text) {
 				data.push('<!DOCTYPE' + text + '>\n');
 			};
 
-			this.getString = function() {
+			this.getString = function () {
 				while (stack.length) {
 					this.end();  // internally calls `stack.pop();`
 				}
 				return data.join('').replace(/\n$/, '');
 			};
 
-			this.reset = function() {
+			this.reset = function () {
 				data.length = 0;
 				stack.length = 0;
 			};
