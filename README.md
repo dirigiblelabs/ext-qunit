@@ -15,7 +15,7 @@ QUnit.test("Test 1", function(assert) {
 	assert.ok(false, 'Failing assertion');
 });
 
-require("qunit/test-runner").run();
+require("qunit/runner").run();
 ```
 
 The next section will use this example to explore the main steps in using QUnit for testing server-side scripts.
